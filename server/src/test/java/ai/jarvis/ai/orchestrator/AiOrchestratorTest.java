@@ -101,7 +101,10 @@ class AiOrchestratorTest {
 
         Prompt prompt = mock(Prompt.class);
         AiProvider aiProvider = mock(AiProvider.class);
-        when(aiProvider.streamChat(prompt)).thenReturn(Flux.just("Hello"," back"));
+        when(aiProvider.streamChat(prompt)).thenReturn(Flux.deferContextual(ctx -> {
+            assertEquals(userId, ctx.get("ultimate.userId"));
+            return Flux.just("Hello", " back");
+        }));
         when(aiProvider.getModelName()).thenReturn(MODEL_NAME);
 
         when(this.r2dbcEntityTemplate.insert(any(Message.class))).thenReturn(Mono.just(userMsg));
@@ -159,7 +162,10 @@ class AiOrchestratorTest {
         Message userMsg = generateUserMessage(sessionId, message);
 
         Prompt prompt = mock(Prompt.class);
-        when(aiProvider.streamChat(prompt)).thenReturn(Flux.just("Hello"," back"));
+        when(aiProvider.streamChat(prompt)).thenReturn(Flux.deferContextual(ctx -> {
+            assertEquals(userId, ctx.get("ultimate.userId"));
+            return Flux.just("Hello", " back");
+        }));
         when(aiProvider.getModelName()).thenReturn(modelName);
 
         when(this.r2dbcEntityTemplate.insert(any(Message.class))).thenReturn(Mono.just(userMsg));
@@ -223,7 +229,10 @@ class AiOrchestratorTest {
 
         Prompt prompt = mock(Prompt.class);
         AiProvider aiProvider = mock(AiProvider.class);
-        when(aiProvider.streamChat(prompt)).thenReturn(Flux.just("Hello"," back"));
+        when(aiProvider.streamChat(prompt)).thenReturn(Flux.deferContextual(ctx -> {
+            assertEquals(userId, ctx.get("ultimate.userId"));
+            return Flux.just("Hello", " back");
+        }));
         when(aiProvider.getModelName()).thenReturn(MODEL_NAME);
 
         when(this.r2dbcEntityTemplate.insert(any(Message.class))).thenReturn(Mono.just(userMsg)).thenReturn(Mono.just(assistantMsg));
@@ -270,7 +279,10 @@ class AiOrchestratorTest {
 
         Prompt prompt = mock(Prompt.class);
         AiProvider aiProvider = mock(AiProvider.class);
-        when(aiProvider.streamChat(prompt)).thenReturn(Flux.just("Hello"," back"));
+        when(aiProvider.streamChat(prompt)).thenReturn(Flux.deferContextual(ctx -> {
+            assertEquals(userId, ctx.get("ultimate.userId"));
+            return Flux.just("Hello", " back");
+        }));
         when(aiProvider.getModelName()).thenReturn(MODEL_NAME);
 
         when(this.r2dbcEntityTemplate.insert(any(Message.class))).thenReturn(Mono.just(userMsg));

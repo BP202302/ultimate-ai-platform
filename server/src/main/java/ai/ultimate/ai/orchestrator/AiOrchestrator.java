@@ -160,6 +160,7 @@ public class AiOrchestrator {
                     );
 
                     return provider.streamChat(prompt)
+                            .contextWrite(ctx -> request.userId() == null ? ctx : ctx.put("ultimate.userId", request.userId()))
                             .doOnNext(token -> {
                                 responseBuilder
                                         .append(token);

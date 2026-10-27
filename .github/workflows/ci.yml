@@ -57,6 +57,9 @@ jobs:
           java-version: 21
           cache: maven
 
+      - name: Install image processing runtime
+        run: sudo apt-get update && sudo apt-get install -y imagemagick fonts-dejavu-core
+
       - name: Make Maven wrapper executable
         run: chmod +x server/mvnw
 

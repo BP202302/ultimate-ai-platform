@@ -91,11 +91,12 @@ public class GeminiProvider implements AiProvider {
 
         // PHASE 4: Register tools if available
         if (toolRegistry.hasTools()) {
-            return chatClient
+            return Flux.deferContextual(context -> chatClient
                     .prompt(prompt)
-                    .tools(toolRegistry.asArray())
+                    .tools(tools -> tools.instances(toolRegistry.asArray())
+                        .context(context.hasKey("ultimate.userId") ? java.util.Map.of("ultimate.userId", context.get("ultimate.userId")) : java.util.Map.of()))
                     .stream()
-                    .content();
+                    .content());
         }
 
         return chatClient

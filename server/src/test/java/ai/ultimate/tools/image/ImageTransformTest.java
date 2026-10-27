@@ -43,4 +43,9 @@ class ImageTransformTest {
   long start=System.nanoTime();assertThrows(java.io.IOException.class,()->new ImageTransform(exe.toString(),Duration.ofMillis(50)).transform(input,scratch,options("png",false)));
   assertTrue(Duration.ofNanos(System.nanoTime()-start).toSeconds()<5);
  }
+ @Test void readsRealJpegAndFitsAspectRatio() throws Exception {
+  Path input=scratch.resolve("input.jpg");ImageIO.write(new BufferedImage(20,40,BufferedImage.TYPE_INT_RGB),"jpeg",input.toFile());
+  Path result=new ImageTransform("/usr/bin/convert",Duration.ofSeconds(15)).transform(input,scratch,options("jpeg",false));
+  BufferedImage image=ImageIO.read(result.toFile());assertEquals(8,image.getWidth());assertEquals(16,image.getHeight());
+ }
 }
