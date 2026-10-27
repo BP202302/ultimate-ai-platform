@@ -80,7 +80,7 @@ public final class ImageTransform {
         if (!options.watermark().isEmpty()) args.addAll(List.of("-gravity", "southeast", "-fill", "white",
             "-undercolor", "#00000080", "-font", "DejaVu-Sans", "-pointsize", "14", "-annotate", "+4+4", options.watermark()));
         args.addAll(List.of("-strip", "-quality", Integer.toString(options.quality()), options.format()+":"+output));
-        
+
         ProcessBuilder builder = new ProcessBuilder(args).directory(scratch.toFile())
             .redirectErrorStream(true);
         builder.environment().clear();
