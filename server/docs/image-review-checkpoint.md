@@ -30,9 +30,9 @@ Input WebP is deliberately unsupported by the current API; output WebP is tested
 
 ## Remaining review work
 
-- Extend resource/performance evidence with measured operation and batch timing,
-  CPU/RAM, temporary disk and repeated/concurrent load, with explicit sampling
-  limits. No new benchmark numbers are asserted in this checkpoint.
+- Local resource/performance evidence now covers seven bounded scenarios: see
+  [ARM64 measurements](image-benchmark-arm64.md) and the raw CSV. The reference
+  hardware, production workload, long-run and forced-crash gaps remain open.
 - Audit descendant cleanup and forced-crash lifecycle in isolation; do not treat
   successful ordinary cleanup as proof of crash/host-termination cleanup.
 - Preserve the distinction between direct deterministic tool tests and real
@@ -40,9 +40,9 @@ Input WebP is deliberately unsupported by the current API; output WebP is tested
 - The requested x86/NVIDIA environment is unavailable in the authorized VM
   (ARM64, about 12 GB RAM, no GPU), so reference-hardware/VRAM claims cannot be made.
   Other model calls remain outside this operator's authorization.
-- Review and publish this supplement to the existing PR through the publication
-  gateway; no duplicate PR or unverified hardware result should be created.
+- This supplement belongs to the existing PR; it is not a separate feature or
+  a claim to reference-hardware validation. Upstream CI remains required.
 
-These are local prepared artifacts, not upstream acceptance. The USD250 bounty
+These are local validation artifacts, not upstream acceptance. The USD250 bounty
 remains conditional on maintainer/management/financial approval. No payment or
 technical approval is implied by the passing corpus.

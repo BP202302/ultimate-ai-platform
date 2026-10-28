@@ -1,0 +1,8 @@
+scenario,width,height,files,format,wall_ms,cpu_core_percent,sampled_cgroup_memory_bytes,sampled_scratch_bytes,input_bytes,output_bytes,jvm_fd_delta,live_descendants
+normal-png,512,256,1,png,72.303,151.364,38338560,93103,91344,993,0,0
+normal-jpeg,512,256,1,jpeg,24.173,117.667,42827776,92110,91344,5135,0,0
+high-resolution,2048,1024,1,png,212.162,148.569,121139200,405581,404815,2816,0,0
+large-webp,4096,2048,1,webp,694.896,109.039,250978304,68036553,926923,4108,0,0
+sequential-batch,1024,512,3,png,199.063,110.284,165138432,327497,319611,8382,0,0
+repeated-sequential,512,256,10,png,297.439,115.503,163209216,930037,913440,9930,0,0
+concurrent-two,2048,1024,2,png,260.773,150.935,218705920,816794,809630,5632,0,0
