@@ -24,6 +24,21 @@ public final class ImageForcedExitProbe {
                 false, 100, 100, 85, "", new ToolContext(Map.of("ultimate.userId", tenant)));
             return;
         }
+        boolean container = args.length == 1 && args[0].equals("container");
+        if (args.length != 0 && !container)
+            throw new IllegalArgumentException("Use no arguments, child <root> <tenant>, or container");
+        if (container) {
+            // The lifecycle under test requires the application JVM itself to be PID 1.
+            if (ProcessHandle.current().pid() != 1)
+                throw new IllegalStateException("Container mode requires the JVM as PID 1");
+            long previous;
+            try (var paths = Files.list(Path.of(System.getProperty("java.io.tmpdir")))) {
+                previous = paths.filter(path -> path.getFileName().toString()
+                    .startsWith("image-forced-exit-probe-")).count();
+            }
+            System.out.println("container_preexisting_probe_roots=" + previous);
+            if (previous != 0) throw new IllegalStateException("Prior probe storage survived restart");
+        }
         Path root = Files.createTempDirectory("image-forced-exit-probe-");
         UUID tenant = UUID.randomUUID();
         Path workspace = Files.createDirectories(root.resolve(tenant.toString()).resolve("session"));
@@ -36,6 +51,15 @@ public final class ImageForcedExitProbe {
         Files.writeString(executable, "#!/bin/sh\nprintf '%s' \"$$\" > '" + marker
             + "'\nexec /bin/sleep 30\n");
         if (!executable.toFile().setExecutable(true)) throw new IllegalStateException("Cannot make helper executable");
+        if (container) {
+            System.out.println("container_probe_root=" + root);
+            System.out.flush();
+            // Invoke the tool in this JVM, not in a nested child JVM. The host must
+            // wait for native.pid, observe the live worker, then SIGKILL this container.
+            // All fixtures are deliberately left in the private tmpfs for that check.
+            main(new String[]{"child", root.toString(), tenant.toString()});
+            throw new IllegalStateException("Host did not kill the container during transformation");
+        }
         Process child = null;
         ProcessHandle nativeWorker = null;
         try {
